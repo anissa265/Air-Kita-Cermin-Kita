@@ -67,6 +67,7 @@ with st.form("form_input"):
         ecoli = st.number_input("E-Coli (Jumlah/100mL)", step=1.0, format="%.1f")
 
     selected_logam = st.multiselect("🧪 Pilih Jenis Logam Berat yang Terdeteksi (Opsional)", list(ambang_logam.keys()))
+
     kadar_logam_input = {}
     if selected_logam:
         st.markdown("### 💡 Masukkan Kadar Logam Berat:")
