@@ -18,27 +18,25 @@ def set_background(image_path):
     st.markdown(css, unsafe_allow_html=True)
 
 # Pasang background
-set_background("kurakura.png")
+set_background("turtle.jpg")
 
 # === Judul Aplikasi ===
 st.markdown("<h1 style='text-align:center; color:white;'>💧 Indeks Pencemaran Air</h1>", unsafe_allow_html=True)
 
 # === Penjelasan ===
-with st.expander("📘 Penjelasan Parameter Kualitas Air"):
+with st.expander("📘 Apa Itu Indeks Pencemaran Air (IPA)?"):
     st.markdown("""
     <div style='color:white'>
     <b>Indeks Pencemaran Air (IPA)</b> adalah suatu metode kuantitatif untuk menilai tingkat pencemaran suatu badan air berdasarkan parameter kualitas air yang diukur dan dibandingkan dengan baku mutu yang ditetapkan untuk peruntukan tertentu.
-    - <b>pH</b>: 6.5 - 8.5  
-    - <b>Suhu</b>: Maksimal kenaikan 3°C  
-    - <b>DO</b>: &gt; 5 mg/L  
-    - <b>BOD</b>: &lt; 3 mg/L  
-    - <b>COD</b>: &lt; 10 mg/L  
-    - <b>TSS</b>: &lt; 50 mg/L  
-    - <b>TDS</b>: ≤ 500 mg/L  
-    - <b>E-Coli</b>: 0 JML/100 mL  
-    - <b>Logam Berat</b>: (opsional, tergantung jenis)
     </div>
     """, unsafe_allow_html=True)
+with st.expander("Parameter Uji Penetapan Indeks Pencemaran Air"):
+    st.markdown("""
+    <div style='color:white'>
+    ##<b>pH</b> Menunjukkan tingkat keasaman atau kebasaan air.
+    - Rentang ideal: 6–9. Di luar rentang ini bisa mengganggu kehidupan akuatik dan mempercepat korosi atau reaksi kimia tertentu
+    ##<b>Suhu</b> Mempengaruhi kelarutan oksigen dan aktivitas biologis.
+    - Suhu tinggi menurunkan kadar oksigen terlarut dan mempercepat reaksi kimia. Deviasi ±3°C dari suhu alami dianggap aman.
 
 # === Ambang batas logam berat ===
 ambang_logam = {
