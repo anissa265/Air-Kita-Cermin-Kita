@@ -1,7 +1,7 @@
 import streamlit as st
 import base64
 
-# === Background Gambar ===
+# === Fungsi background ===
 def set_background(image_path):
     with open(image_path, "rb") as image_file:
         encoded = base64.b64encode(image_file.read()).decode()
@@ -27,18 +27,19 @@ st.markdown("<h1 style='text-align:center; color:white;'>💧 Indeks Pencemaran 
 with st.expander("📘 Penjelasan Lengkap Tentang Indeks Pencemaran Air dan Parameternya"):
     st.markdown("""
     <div style='color:white'>
-    <b>Indeks Pencemaran Air (IPA)</b> adalah suatu metode kuantitatif untuk menilai tingkat pencemaran suatu badan air berdasarkan parameter kualitas air yang diukur dan dibandingkan dengan baku mutu tertentu.
-    
-    Berikut penjelasan singkat tiap parameter:
-    - <b>pH</b>: Rentang ideal 6–9. Di luar ini berbahaya bagi makhluk hidup dan mempercepat korosi.
-    - <b>Suhu</b>: Kenaikan maksimal ±3°C dari suhu alami.
-    - <b>DO</b> (Oksigen Terlarut): Ideal ≥ 4 mg/L. Kurang dari itu mengindikasikan pencemaran organik.
-    - <b>BOD</b>: Ideal ≤ 3 mg/L. Mewakili jumlah oksigen yang dibutuhkan mikroba untuk menguraikan bahan organik.
-    - <b>COD</b>: Ideal ≤ 25 mg/L. Mewakili pencemar organik dan anorganik.
-    - <b>TDS</b>: Ideal ≤ 1000 mg/L. Terlalu tinggi bisa membahayakan organisme air.
-    - <b>TSS</b>: Ideal ≤ 50 mg/L. Menunjukkan kekeruhan air.
-    - <b>E-Coli</b>: Ideal ≤ 1000 MPN/100mL. Tanda pencemaran feses manusia/hewan.
-    - <b>Logam Berat</b>: Harus di bawah ambang batas tertentu (lihat input logam berat).
+    <p><b>Indeks Pencemaran Air (IPA)</b> adalah metode untuk menilai kondisi kualitas air berdasarkan parameter-parameter fisik, kimia, dan biologis yang dibandingkan dengan standar baku mutu.</p>
+
+    <ul>
+        <li>⚗ <b>pH</b>: Menunjukkan tingkat keasaman atau kebasaan air. Ideal antara 6–9. Di luar rentang ini bisa membahayakan makhluk hidup air.</li>
+        <li>🌡 <b>Suhu</b>: Suhu tinggi menurunkan kelarutan oksigen dan mempercepat reaksi kimia. Kenaikan maksimum ±3°C dari suhu alami dianggap aman.</li>
+        <li>🫧 <b>DO (Oksigen Terlarut)</b>: Oksigen yang tersedia dalam air untuk biota. Idealnya ≥ 4 mg/L. DO rendah dapat membunuh ikan dan biota lain.</li>
+        <li>🦠 <b>BOD</b>: Jumlah oksigen yang dibutuhkan mikroorganisme untuk menguraikan bahan organik. Semakin tinggi, semakin tercemar. Baku mutu: ≤ 3 mg/L.</li>
+        <li>🧪 <b>COD</b>: Menunjukkan total bahan organik (dan anorganik) dalam air. Nilai tinggi mengindikasikan pencemaran berat. Baku mutu: ≤ 25 mg/L.</li>
+        <li>💧 <b>TDS</b>: Jumlah zat terlarut seperti garam, logam, mineral. Nilai tinggi bisa mengganggu keseimbangan osmotik. Baku mutu: ≤ 1000 mg/L.</li>
+        <li>🌫 <b>TSS</b>: Padatan tersuspensi (lumpur, tanah). Tinggi menyebabkan kekeruhan, mengganggu fotosintesis. Baku mutu: ≤ 50 mg/L.</li>
+        <li>☣ <b>Logam Berat</b>: Bersifat toksik walau dalam konsentrasi rendah. Contoh: Timbal, Raksa, Arsen. Harus di bawah ambang batas yang ditetapkan.</li>
+        <li>🧻 <b>E-Coli</b>: Indikator pencemaran dari feses manusia/hewan. Jika tinggi, berpotensi menyebabkan penyakit. Baku mutu: ≤ 1000 MPN/100mL.</li>
+    </ul>
     </div>
     """, unsafe_allow_html=True)
 
@@ -65,10 +66,10 @@ with st.form("form_input"):
         tss = st.number_input("TSS (mg/L)", step=0.1, format="%.1f")
         ecoli = st.number_input("E-Coli (Jumlah/100mL)", step=1.0, format="%.1f")
 
-    selected_logam = st.multiselect("Pilih Jenis Logam Berat yang Terdeteksi (Opsional)", list(ambang_logam.keys()))
+    selected_logam = st.multiselect("🧪 Pilih Jenis Logam Berat yang Terdeteksi (Opsional)", list(ambang_logam.keys()))
     kadar_logam_input = {}
     if selected_logam:
-        st.markdown("### 💡 Nilai Kadar Logam Berat:")
+        st.markdown("### 💡 Masukkan Kadar Logam Berat:")
         for logam in selected_logam:
             kadar = st.number_input(f"Kadar {logam} (mg/L)", step=0.001, format="%.3f", key=logam)
             kadar_logam_input[logam] = (kadar, ambang_logam[logam])
@@ -77,43 +78,42 @@ with st.form("form_input"):
 
 # === Analisis ===
 if submit:
-    # Cek apakah semua nilai default (tidak diisi)
     input_dasar = [ph, suhu, do, bod, cod, tss, tds, ecoli]
     if all(v == 0 for v in input_dasar) and not kadar_logam_input:
-        st.warning("⚠ Silakan isi parameter kualitas air terlebih dahulu untuk melihat hasil analisis.")
+        st.warning("⚠ Silakan isi parameter kualitas air terlebih dahulu.")
     else:
         pelanggaran = 0
         catatan = []
 
         if ph < 6.5 or ph > 8.5:
             pelanggaran += 1
-            catatan.append("pH di luar rentang aman (6.5 - 8.5)")
+            catatan.append("⚗ pH di luar rentang aman (6.5 - 8.5)")
         if suhu > 30:
             pelanggaran += 1
-            catatan.append("Suhu naik > 3°C dari alami")
+            catatan.append("🌡 Suhu naik > 3°C dari alami")
         if do < 4:
             pelanggaran += 1
-            catatan.append("DO < 4 mg/L")
+            catatan.append("🫧 DO < 4 mg/L")
         if bod > 3:
             pelanggaran += 1
-            catatan.append("BOD > 3 mg/L")
+            catatan.append("🦠 BOD > 3 mg/L")
         if cod > 25:
             pelanggaran += 1
-            catatan.append("COD > 25 mg/L")
+            catatan.append("🧪 COD > 25 mg/L")
         if tss > 50:
             pelanggaran += 1
-            catatan.append("TSS > 50 mg/L")
+            catatan.append("🌫 TSS > 50 mg/L")
         if tds > 1000:
             pelanggaran += 1
-            catatan.append("TDS > 1000 mg/L")
+            catatan.append("💧 TDS > 1000 mg/L")
         if ecoli > 1000:
             pelanggaran += 1
-            catatan.append("E-Coli melebihi batas aman (>1000 MPN/100mL)")
+            catatan.append("🧻 E-Coli melebihi batas aman (>1000 MPN/100mL)")
 
         for logam, (nilai, ambang) in kadar_logam_input.items():
             if nilai > ambang:
                 pelanggaran += 1
-                catatan.append(f"{logam} melebihi ambang batas ({nilai} > {ambang})")
+                catatan.append(f"☣ {logam} melebihi ambang batas ({nilai} > {ambang})")
 
         if pelanggaran == 0:
             status, color = "💚 Baik", "rgba(46, 204, 113, 0.75)"
